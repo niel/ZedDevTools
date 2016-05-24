@@ -1,0 +1,11 @@
+.DS_Store
+php_errors.log
+php-errors.log
+test.php
+
+# Editor temp files
+*#
+*~
+*.orig
+
+/.idea/
