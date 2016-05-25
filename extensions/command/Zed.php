@@ -26,7 +26,7 @@ use \app\extensions\util\Git;
  * Actions:
  *  * commit	(replacement for the ./commit script).
  *
- * @package niel\zeddev\extensions\command
+ * @package li3_zeddev\extensions\command
  */
 class Zed extends \app\extensions\console\Command
 {
