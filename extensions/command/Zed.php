@@ -16,7 +16,7 @@
  * @author    niel
  * @copyright 2016 nZEDb
  */
-namespace nzedb\zeddev\extensions\command;
+namespace li3_zeddev\extensions\command;
 
 use \app\extensions\util\Git;
 
