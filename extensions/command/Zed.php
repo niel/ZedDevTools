@@ -19,6 +19,7 @@
 namespace li3_zeddev\extensions\command;
 
 use \app\extensions\util\Git;
+use \nzedb\db\DbUpdate;
 
 /**
  * Tools for working on nZEDb.
@@ -42,13 +43,13 @@ class Zed extends \app\extensions\console\Command
 
 	public function commit()
 	{
-		system('git add -i', $status);
+		system('git add -i > /dev/tty < /dev/tty', $status);
 		if ($status !== 0) {
 			//TODO handle the error
 			exit($status);
 		}
 
-		system('nano Changelog', $status);
+		system('nano Changelog > /dev/tty < /dev/tty', $status);
 		if ($status !== 0) {
 			//TODO handle the error
 			exit($status);
@@ -63,15 +64,20 @@ class Zed extends \app\extensions\console\Command
 		$this->initialiseGit();
 
 		if (in_array($this->git->getBranch(), $this->git->getBranchesMain())) {
-			system('./zed update db', $status);
+			// TODO rewrite to use internal code not nzedb's.
+			// Only update patches, etc. on specific branches to lessen conflicts
+			try {
+				// Run DbUpdates to make sure we're up to date.
+				$DbUpdater = new DbUpdate(['git' => $git]);
+				$DbUpdater->newPatches(['safe' => false]);
+			} catch (\Exception $e) {
+				$error = 1;
+				echo "Error while checking patches!\n";
+				echo $e->getMessage() . "\n";
+			}
 		}
 
-		if ($status > 0) {
-			$this->out('An error occured while trying to process new SQL patches.', 'error');
-			exit($status);
-		}
-
-		system('git commit', $status);
+		system('git commit > /dev/tty', $status);
 	}
 
 	protected function initialiseGit()
